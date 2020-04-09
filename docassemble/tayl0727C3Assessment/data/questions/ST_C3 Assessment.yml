@@ -80,7 +80,7 @@ columns:
 question: |
   Is the information for ${ STperson_info[i]['First Name'] } correct?
 fields:
-  - no label: STperson_info[i]['STanswers']
+  - no label: STquestions[i]['STanswers']
     datatype: checkboxes
-    code: STperson_info[i]['STchoices']
+    code: STquestions[i]['STchoices']
 ---
