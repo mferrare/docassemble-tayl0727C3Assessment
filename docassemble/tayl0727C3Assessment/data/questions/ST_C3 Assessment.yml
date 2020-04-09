@@ -1,0 +1,86 @@
+---
+variable name: STperson_info
+use objects: True
+data:
+  - First Name: Stef
+    Last Name: Taylor
+    Age: 20
+    Hobbies: Surfing
+    Do you like pets?: True
+  - First Name: Mike
+    Last Name: Taylor
+    Age: 60
+    Hobbies: Fishing
+    Do you like pets?: True
+  - First Name: Heidi
+    Last Name: Taylor
+    Age: 62
+    Hobbies: Gardening
+    Do you like pets?: True
+---
+mandatory: True
+code: |
+  for STitem in STperson_info:
+    STitem['STchoices'] = []
+    for STkey in STitem:
+      STitem['STchoices'].append('{} is {}'.format(STkey, STitem[STkey]))
+---
+variable name: STquestions
+use objects: True
+data:
+  - STquestion: Is the information about Stef correct? 
+    STchoices:
+      - First name is Stef
+      - Last name is Taylor
+      - Age is 20
+      - Hobbies include surfing
+      - Does like pets
+  - STquestion: Is the information about Mike correct?
+    STchoices:
+      - First name is Mike
+      - Last name is Taylor
+      - Age is 60
+      - Hobbies include fishing
+      - Does like pets
+  - STquestion: Is the information about Heidi correct?
+    STchoices:
+    - First name is Heidi
+    - Last name is Taylor
+    - Age is 62
+    - Hobbies include gardening
+    - Does like pets
+---
+mandatory: True
+question: Please Check Your Responses 
+subquestion: |
+  ### Here is the result of your checkbox selection 
+  
+  ${ STquestion_table }
+ 
+attachment:
+  - name: Table of Questions and Responses
+    docx template file: C3_Responses_Document.docx
+    valid formats: 
+    - pdf
+ 
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+table: STquestion_table
+rows: STquestions
+columns: 
+  - Question: |
+      row_item['STquestion']
+  - Selected answers: |
+      row_item['STanswers'].true_values()
+  - No. Selected answers: |
+      len(row_item['STanswers'].true_values())
+---
+question: |
+  Is the information for ${ STperson_info[i]['First Name'] } correct?
+fields:
+  - no label: STperson_info[i]['STanswers']
+    datatype: checkboxes
+    code: STperson_info[i]['STchoices']
+---
